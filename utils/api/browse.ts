@@ -1,5 +1,4 @@
 import { context } from "./constant";
-import { randomVisitorId } from "./function";
 
 export default async function browse(browseId: string, params?: string) {
   const body = { context, browseId, params }
@@ -12,7 +11,7 @@ export default async function browse(browseId: string, params?: string) {
             "Accept": "*/*",
             "Accept-Language": "en-US,en;q=0.5",
             "Content-Type": "application/json",
-            "X-Goog-Visitor-Id": randomVisitorId(),
+            "X-Goog-Visitor-Id": context.client.visitorData,
             "X-Youtube-Bootstrap-Logged-In": "false",
             "X-Youtube-Client-Name": "67",
             "X-Youtube-Client-Version": "1.20240522.01.00",

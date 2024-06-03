@@ -1,4 +1,4 @@
-import { randomIp } from "./function";
+import { randomIp, randomVisitorId } from "./function";
 
 export const context = {
   "client": {
@@ -7,7 +7,7 @@ export const context = {
     "remoteHost": randomIp(),
     "deviceMake": "",
     "deviceModel": "",
-    "visitorData": "Cgt6RTFxUG5KNWdKNCiOmu-yBjIKCgJJRBIEGgAgYA%3D%3D",
+    "visitorData": randomVisitorId(),
     "userAgent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0,gzip(gfe)",
     "clientName": "WEB_REMIX",
     "clientVersion": "1.20240522.01.00",
