@@ -1,6 +1,6 @@
 import { TextComponentDetail } from "@/app/api/featured/route";
 
-export function randomIp() {
+export function randomIp(): string {
   let result = '';
   for (let i = 0; i < 4; i++) {
     result += Math.floor(Math.random() * 255) + 1;
@@ -11,7 +11,7 @@ export function randomIp() {
   return result;
 }
 
-export function randomVisitorId() {
+export function randomVisitorId(): string {
   const alphanum = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
   let result = '';
   for (let i = 0; i < 21; i++) {
