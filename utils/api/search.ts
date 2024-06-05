@@ -1,10 +1,10 @@
 import { context } from "./constant";
 
-export default async function browse(browseId: string, params?: string) {
-  const body = { context, browseId, params };
+export default async function search(query: string, params?: string) {
+  const body = { context, query, params };
   try {
     return await (
-      await fetch("https://music.youtube.com/youtubei/v1/browse?prettyPrint=false", {
+      await fetch("https://music.youtube.com/youtubei/v1/search?prettyPrint=false", {
         "credentials": "include",
         "headers": {
             "User-Agent": "Mozilla/5.0 (X11; Linux x86_64; rv:109.0) Gecko/20100101 Firefox/115.0",
