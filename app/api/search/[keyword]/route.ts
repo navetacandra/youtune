@@ -1,11 +1,11 @@
 import { parseTitle } from "@/utils/api/function";
-import search from "@/utils/api/search";
 import { NextResponse } from "next/server";
 import { Content, ContentDetail, TextComponentDetail } from "../../featured/route";
+import fapi from "@/utils/api/fapi";
 
 export async function GET(_: Request, { params: { keyword } }: { params: { keyword: string } }) {
   try {
-    const res = await search(keyword);
+    const res = await fapi("search", { query: keyword });
     const content = res.contents.tabbedSearchResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents;
     
     const headContent: ContentDetail[] = content.filter((c: { [k: string]: boolean }) => c.musicCardShelfRenderer).map((c: { [k: string]: any }) => {

@@ -8,7 +8,7 @@ export type Content = {category: string, contents: ContentDetail[]};
 
 export async function GET() {
   try {
-    const res = await fapi("browse", "FEmusic_home");
+    const res = await fapi("browse", { browseId: "FEmusic_home" });
     const contents: Content[] = res.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents
     .filter((c: {[k: string]: boolean}) => c.musicCarouselShelfRenderer)
     .map((_c: any) => {
