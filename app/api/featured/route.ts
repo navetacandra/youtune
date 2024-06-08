@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
-import browse from "@/utils/api/browse";
 import { parseTitle } from "@/utils/api/function";
+import fapi from "@/utils/api/fapi";
 
 export type TextComponentDetail = {text: string, type?: string, id?: string};
 export type ContentDetail = {id: string, type: string, thumbnail: string, title: TextComponentDetail, subtitle: TextComponentDetail[]};
@@ -8,7 +8,7 @@ export type Content = {category: string, contents: ContentDetail[]};
 
 export async function GET() {
   try {
-    const res = await browse("FEmusic_home");
+    const res = await fapi("browse", "FEmusic_home");
     const contents: Content[] = res.contents.singleColumnBrowseResultsRenderer.tabs[0].tabRenderer.content.sectionListRenderer.contents
     .filter((c: {[k: string]: boolean}) => c.musicCarouselShelfRenderer)
     .map((_c: any) => {

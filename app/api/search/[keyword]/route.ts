@@ -17,30 +17,33 @@ export async function GET(_: Request, { params: { keyword } }: { params: { keywo
       return { id: title?.id, type: title?.type, thumbnail, title, subtitle };
     });
 
-    const _mcontents: Content = {
+    const _mcontents = content.find((c: { [k: string]: boolean }) => c.musicCardShelfRenderer).musicCardShelfRenderer.contents;
+    const mcontents: Content = {
       category: '',
       contents: [
         ...headContent,
-        content.find((c: { [k: string]: boolean }) => c.musicCardShelfRenderer).musicCardShelfRenderer.contents
-        .filter((c: { [k: string]: boolean }) => c.musicResponsiveListItemRenderer)
-        .map((c: {[k: string]: any}) => {
-          const mrlir = c.musicResponsiveListItemRenderer,
-          fc: TextComponentDetail[] = mrlir.flexColumns
-            .map((f: any) => f.musicResponsiveListItemFlexColumnRenderer.text.runs)
-            .filter((f: boolean) => f)
-            .map((f: any) => parseTitle(f))
-            .flat(),
-          title: TextComponentDetail = fc[0],
-          subtitle: TextComponentDetail[] = fc.slice(1),
-          _thumbnail: string = mrlir.thumbnail.musicThumbnailRenderer.thumbnail.thumbnails.slice(-1)[0].url,
-          thumbnail: string = _thumbnail.match(/https:\/\/i\.ytimg\.com/i) ? _thumbnail : _thumbnail.replace(/=w\d+-h\d+/, '=w512-h512');
+        ...(
+          !_mcontents ? [] : _mcontents
+          .filter((c: { [k: string]: boolean }) => c.musicResponsiveListItemRenderer)
+          .map((c: {[k: string]: any}) => {
+            const mrlir = c.musicResponsiveListItemRenderer,
+            fc: TextComponentDetail[] = mrlir.flexColumns
+              .map((f: any) => f.musicResponsiveListItemFlexColumnRenderer.text.runs)
+              .filter((f: boolean) => f)
+              .map((f: any) => parseTitle(f))
+              .flat(),
+            title: TextComponentDetail = fc[0],
+            subtitle: TextComponentDetail[] = fc.slice(1),
+            _thumbnail: string = mrlir.thumbnail.musicThumbnailRenderer.thumbnail.thumbnails.slice(-1)[0].url,
+            thumbnail: string = _thumbnail.match(/https:\/\/i\.ytimg\.com/i) ? _thumbnail : _thumbnail.replace(/=w\d+-h\d+/, '=w512-h512');
 
-          return { id: title?.id, type: title?.type, thumbnail, title, subtitle };
-        })
+            return { id: title?.id, type: title?.type, thumbnail, title, subtitle };
+          })
+        )
       ].filter((f: { [k: string]: boolean }) => f.id)
     };
 
-    const _contents: Content[] = content.filter((c: { [k: string]: boolean }) => !c.musicCardShelfRenderer)
+    const _contents: Content[] = content.filter((c: { [k: string]: boolean }) => !c.musicCardShelfRenderer && c.musicShelfRenderer)
     .map((c: { [k: string]: any }) => {
       const msr = c.musicShelfRenderer,
       category: string = msr.title.runs[0].text,
@@ -62,7 +65,7 @@ export async function GET(_: Request, { params: { keyword } }: { params: { keywo
       return { category, contents };
     });
 
-    const results: Content[] = [_mcontents, ..._contents];
+    const results: Content[] = [mcontents, ..._contents];
     return NextResponse.json({ keyword, results });
   } catch (err: any) {
     console.log(err)
