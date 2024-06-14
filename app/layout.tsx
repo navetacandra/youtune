@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-import Search from "@/components/Search";
+import Sidebar from "@/components/Sidebar/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,8 +18,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Search/>
-        {children}
+        <div className="flex h-full w-full rounded-xl shadow-lg z-10 bg-[#272d54]">
+          <Sidebar />
+          <div className="flex flex-col w-full z-10 h-full ml-[90px]">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );

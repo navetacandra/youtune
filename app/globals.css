@@ -31,3 +31,22 @@ body {
     text-wrap: balance;
   }
 }
+
+
+.icon {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 1,5px;
+}
+
+.icon path {
+  fill: none;
+}
+
+.icon:hover {
+  fill: #fff;
+}
+
+.icon:hover path {
+  fill: #fff;
+}

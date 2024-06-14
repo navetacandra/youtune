@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { Content, ContentDetail } from "@/app/api/featured/route";
 import useSWR from "swr";
 import Image from "next/image";
+import Search from "@/components/Search";
 
 const fetcher = (url:string) => fetch(url).then(r => r.json())
 
@@ -16,6 +17,7 @@ export default function Home() {
   
   return (
     <>
+    <Search/>
       {
         data.map((d:Content, i:number) => (
           <Fragment key={i}>
