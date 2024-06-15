@@ -8,7 +8,7 @@ import Search from "@/components/Search";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export default function Home() {
+const Home = () => {
   const { data, error, isLoading } = useSWR("/api/featured", fetcher);
 
   if (error) return <p>Erorrrr</p>;
@@ -36,4 +36,6 @@ export default function Home() {
       ))}
     </>
   );
-}
+};
+
+export default Home;

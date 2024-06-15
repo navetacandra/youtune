@@ -7,10 +7,10 @@ import {
 } from "../../featured/route";
 import fapi from "@/utils/api/fapi";
 
-export async function GET(
+export const GET = async (
   _: Request,
   { params: { keyword } }: { params: { keyword: string } },
-) {
+) => {
   try {
     const res = await fapi("search", { query: keyword });
     const content =
@@ -129,4 +129,4 @@ export async function GET(
       { status: 500 },
     );
   }
-}
+};

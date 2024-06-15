@@ -1,7 +1,7 @@
 import Link from "next/link";
 import React, { ReactNode, useState } from "react";
 
-function Icon({
+const Icon = ({
   normal,
   hover,
   to,
@@ -9,7 +9,7 @@ function Icon({
   normal?: ReactNode;
   hover?: ReactNode;
   to: string;
-}) {
+}) => {
   const [isHover, setIsHover] = useState<boolean>(false);
   return (
     <Link
@@ -21,6 +21,6 @@ function Icon({
       {!isHover ? normal : hover}
     </Link>
   );
-}
+};
 
 export default Icon;

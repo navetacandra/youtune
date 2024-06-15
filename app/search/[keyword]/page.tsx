@@ -7,11 +7,7 @@ import Image from "next/image";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
-export default function Page({
-  params: { keyword },
-}: {
-  params: { keyword: string };
-}) {
+const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
   const { data, error, isLoading } = useSWR(
     `/api/search/${decodeURI(keyword)}`,
     fetcher,
@@ -41,4 +37,6 @@ export default function Page({
       ))}
     </>
   );
-}
+};
+
+export default Page;

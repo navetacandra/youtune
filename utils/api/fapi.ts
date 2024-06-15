@@ -1,6 +1,6 @@
 import { context } from "./constant";
 
-export default async function fapi(mode: string, args: any) {
+const fapi = async (mode: string, args: any) => {
   const body = { context, ...args };
   try {
     return await (
@@ -32,4 +32,6 @@ export default async function fapi(mode: string, args: any) {
   } catch (err) {
     throw err;
   }
-}
+};
+
+export default fapi;

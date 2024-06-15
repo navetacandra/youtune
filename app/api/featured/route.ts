@@ -12,7 +12,7 @@ export type ContentDetail = {
 };
 export type Content = { category: string; contents: ContentDetail[] };
 
-export async function GET() {
+export const GET = async () => {
   try {
     const res = await fapi("browse", { browseId: "FEmusic_home" });
     const contents: Content[] =
@@ -92,4 +92,4 @@ export async function GET() {
       { status: 500 },
     );
   }
-}
+};

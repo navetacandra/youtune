@@ -1,6 +1,6 @@
 import { TextComponentDetail } from "@/app/api/featured/route";
 
-export function randomIp(): string {
+export const randomIp = (): string => {
   let result = "";
   for (let i = 0; i < 4; i++) {
     result += Math.floor(Math.random() * 255) + 1;
@@ -9,9 +9,9 @@ export function randomIp(): string {
     }
   }
   return result;
-}
+};
 
-export function randomVisitorId(): string {
+export const randomVisitorId = (): string => {
   const alphanum =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
   let result = "";
@@ -23,9 +23,9 @@ export function randomVisitorId(): string {
     result += alphanum.charAt(Math.floor(Math.random() * alphanum.length));
   }
   return result + "%3D%3D";
-}
+};
 
-export function parseTitle(runs: any[]): TextComponentDetail[] {
+export const parseTitle = (runs: any[]): TextComponentDetail[] => {
   return runs.map((r: any) => {
     const text: string = r.text;
     const type: string = r.navigationEndpoint?.watchEndpoint
@@ -38,4 +38,4 @@ export function parseTitle(runs: any[]): TextComponentDetail[] {
       r.navigationEndpoint?.browseEndpoint?.browseId;
     return { id, text, type };
   });
-}
+};
