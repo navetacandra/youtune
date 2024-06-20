@@ -38,8 +38,8 @@ const Sidebar = () => (
       <Image
         src={"/mainLogo.svg"}
         alt='logo'
-        width={100}
-        height={100}
+        width={120}
+        height={120}
         className='text-white items-center justify-center text-center mt-5'
       />
       <div className='flex flex-col space-y-10 mt-20'>

@@ -24,12 +24,13 @@ const Home = () => {
             <Fragment key={j}>
               <Image
                 src={c.thumbnail}
-                alt='...'
+                alt={c.title.text}
                 width={300}
                 height={250}
                 className='mt-20'
               />
               <h2>{`${c.title.text}`}</h2>
+              <p>{`${c.subtitle[0].text}`}</p>
             </Fragment>
           ))}
         </Fragment>

@@ -13,7 +13,13 @@ const Search = () => {
 
   const handleSearch = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    router.push(`/search/${encodeURI(query.current?.value.trim() || " ")}`);
+    const searchQuery = query.current?.value.trim();
+
+    if (!searchQuery || searchQuery.length < 2) {
+      alert("Harap mencari yang benar");
+    } else {
+      router.push(`/search/${encodeURI(searchQuery || "")}`);
+    }
   };
 
   return (
