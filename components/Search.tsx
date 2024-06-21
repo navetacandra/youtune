@@ -15,9 +15,7 @@ const Search = () => {
     e.preventDefault();
     const searchQuery = query.current?.value.trim();
 
-    if (!searchQuery || searchQuery.length < 2) {
-      alert("Harap mencari yang benar");
-    } else {
+    if (!(!searchQuery || searchQuery.length < 2)) {
       router.push(`/search/${encodeURI(searchQuery || "")}`);
     }
   };
