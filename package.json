@@ -4,7 +4,7 @@
   "private": true,
   "description": "Aplikasi berbasis web untuk memutar musik dari YouTube Music tanpa iklan. Dibuat dengan NextJS (TypeScript).",
   "scripts": {
-    "init": "npm install && husky init && husky install",
+    "init": "npm install && npm run prepare",
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
