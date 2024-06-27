@@ -21,7 +21,7 @@ const RootLayout = ({
         className={`${inter.className} flex h-full w-full min-h-[100dvh] overflow-x-hidden shadow-lg z-10 bg-[#272d54]`}
       >
         <Sidebar />
-        <div className='flex flex-col w-full h-full pl-28 pr-8 pt-5 text-white'>
+        <div className='flex flex-col w-full h-full md:pl-28 pl-4 pr-4 md:pr-8 md:pt-10 pt-20 text-white'>
           {children}
         </div>
       </body>

@@ -21,7 +21,7 @@ const Search = () => {
   };
 
   return (
-    <form onSubmit={handleSearch}>
+    <form onSubmit={handleSearch} className='md:inline-block hidden'>
       <input
         type='text'
         ref={query}
