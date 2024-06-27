@@ -13,6 +13,8 @@ import Likeicon from "@/assets/like.svg";
 import LikeFillicon from "@/assets/like_fill.svg";
 import PlaylistIcon from "@/assets/playlist.svg";
 import PlaylistFillIcon from "@/assets/playlist_fill.svg";
+import Navbar from "../Navbar/page";
+import Bottombar from "../Bottombar/page";
 
 const items: { element: ReactNode }[] = [
   { element: <Icon to='/' normal={<HomeIcon />} hover={<HomeFillIcon />} /> },
@@ -33,22 +35,27 @@ const items: { element: ReactNode }[] = [
 ];
 
 const Sidebar = () => (
-  <div className='fixed top-0 left-0 h-screen w-[90px] p-4 overflow-hidden bg-[#242b46] justify-center items-center text-center'>
-    <div className='flex flex-col items-center'>
-      <Image
-        src={"/mainLogo.svg"}
-        alt='logo'
-        width={120}
-        height={120}
-        className='text-white items-center justify-center text-center mt-5'
-      />
-      <div className='flex flex-col space-y-10 mt-20'>
-        {items.map((item: { element: ReactNode }, i: number) => (
-          <Fragment key={i}>{item.element}</Fragment>
-        ))}
+  <>
+    <Navbar />
+    <div className='fixed top-0 left-0 h-screen w-[90px] p-4 overflow-hidden bg-[#242b46] rounded-none shadow-none justify-center items-center text-center md:inline-block hidden'>
+      <div className='flex flex-col items-center '>
+        <Image
+          id='logo'
+          src={"/mainLogo.svg"}
+          alt='logo'
+          width={100}
+          height={100}
+          className='text-white items-center justify-center text-center h-24 w-24 md:inline-block hidden'
+        />
+        <div className='flex flex-col gap-10 justify-center mt-14 pb-8 pt-2 items-center mx-auto'>
+          {items.map((item: { element: ReactNode }, i: number) => (
+            <Fragment key={i}>{item.element}</Fragment>
+          ))}
+        </div>
       </div>
     </div>
-  </div>
+    <Bottombar />
+  </>
 );
 
 export default Sidebar;
