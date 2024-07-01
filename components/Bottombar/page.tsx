@@ -32,9 +32,9 @@ const items: { element: ReactNode }[] = [
 const Bottombar = () => {
   return (
     <>
-      <div className='fixed left-0 bottom-0 w-screen h-14 p-1 overflow-hidden bg-[#242b46] rounded-t-xl shadow-[0px_-4px_3px_0px_#0000004d] justify-center items-center text-center md:hidden inline-block'>
+      <div className='fixed left-0 bottom-0 w-screen h-16 p-1 overflow-hidden bg-[#242b46] rounded-t-xl custom-shadow justify-center items-center text-center md:hidden inline-block'>
         <div className='flex items-center '>
-          <div className='flex flex-row gap-10  justify-around  pb-8 pt-2 mx-auto'>
+          <div className='flex flex-row gap-10  justify-around pt-3 items-center mx-auto'>
             {items.map((item: { element: ReactNode }, i: number) => (
               <Fragment key={i}>{item.element}</Fragment>
             ))}

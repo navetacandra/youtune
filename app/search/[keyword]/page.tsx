@@ -18,21 +18,23 @@ const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
 
   return (
     <>
-      {data.results.map((d: Content, i: number) => (
+      {data.results?.map((d: Content, i: number) => (
         <Fragment key={i}>
           <h1>{d.category}</h1>
-          {d.contents.map((c: ContentDetail, j: number) => (
-            <Fragment key={j}>
-              <Image
-                src={c.thumbnail}
-                alt='...'
-                width={300}
-                height={250}
-                className='mt-20'
-              />
-              <h2>{`${c.title.text}`}</h2>
-            </Fragment>
-          ))}
+          <div className='mb-20'>
+            {d.contents.map((c: ContentDetail, j: number) => (
+              <Fragment key={j}>
+                <Image
+                  src={c.thumbnail}
+                  alt='...'
+                  width={300}
+                  height={250}
+                  className='mt-5'
+                />
+                <h2>{`${c.title.text}`}</h2>
+              </Fragment>
+            ))}
+          </div>
         </Fragment>
       ))}
     </>
