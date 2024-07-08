@@ -25,7 +25,7 @@ const Search = () => {
       <input
         type='text'
         ref={query}
-        defaultValue={p}
+        defaultValue={decodeURIComponent(p)}
         className='text-black'
       ></input>
     </form>

@@ -3,7 +3,8 @@
 import { Fragment } from "react";
 import { Content, ContentDetail } from "@/app/api/featured/route";
 import useSWR from "swr";
-import Image from "next/image";
+import MusicCard from "@/components/MusicCard/page";
+import Search from "@/components/Search";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
@@ -18,21 +19,15 @@ const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
 
   return (
     <>
+      <Search />
       {data.results?.map((d: Content, i: number) => (
         <Fragment key={i}>
-          <h1>{d.category}</h1>
-          <div className='mb-20'>
+          <h1 className='md:text-3xl text-2xl font-poppins font-bold'>
+            {d.category}
+          </h1>
+          <div className='mb-20 grid md:grid-cols-6 grid-cols-4 gap-4 mb-20 2xl:grid-cols-8'>
             {d.contents.map((c: ContentDetail, j: number) => (
-              <Fragment key={j}>
-                <Image
-                  src={c.thumbnail}
-                  alt='...'
-                  width={300}
-                  height={250}
-                  className='mt-5'
-                />
-                <h2>{`${c.title.text}`}</h2>
-              </Fragment>
+              <MusicCard key={j} thumbnail={c.thumbnail} title={c.title.text} subtitle={c.subtitle[0].text} />
             ))}
           </div>
         </Fragment>
