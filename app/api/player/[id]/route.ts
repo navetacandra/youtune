@@ -7,19 +7,36 @@ export const GET = async (
   { params: { id } }: { params: { id: string } },
 ) => {
   try {
-    const args = {videoId: id, isAudioOnly: true, tunerSettingValue: 'AUTOMIX_SETTING_NORMAL'};
-    const _next = await fapi('next', args);
-    const mqr = _next.contents.singleColumnMusicWatchNextResultsRenderer.tabbedRenderer.watchNextTabbedResultsRenderer.tabs[0].tabRenderer.content.musicQueueRenderer;
-    if(!mqr.content) return NextResponse.json({ status: 404, message: 'Video not found' }, { status: 404 });
-    
-    let res, ok = false;
-    while(!ok) {
-      const format = chooseFormat((await ytdlGetInfo(id)).formats, { quality: 'highestaudio' });
-      res = await fetch(format.url, { method: 'GET', cache: 'no-cache' });
+    const args = {
+      videoId: id,
+      isAudioOnly: true,
+      tunerSettingValue: "AUTOMIX_SETTING_NORMAL",
+    };
+    const _next = await fapi("next", args);
+    const mqr =
+      _next.contents.singleColumnMusicWatchNextResultsRenderer.tabbedRenderer
+        .watchNextTabbedResultsRenderer.tabs[0].tabRenderer.content
+        .musicQueueRenderer;
+    if (!mqr.content)
+      return NextResponse.json(
+        { status: 404, message: "Video not found" },
+        { status: 404 },
+      );
+
+    let res,
+      ok = false;
+    while (!ok) {
+      const format = chooseFormat((await ytdlGetInfo(id)).formats, {
+        quality: "highestaudio",
+      });
+      res = await fetch(format.url, { method: "GET", cache: "no-cache" });
       ok = res.ok;
     }
     return res;
-  } catch(e: any) {
-    return NextResponse.json({ status: 500, message: e?.message }, { status: 500 });
+  } catch (e: any) {
+    return NextResponse.json(
+      { status: 500, message: e?.message },
+      { status: 500 },
+    );
   }
 };

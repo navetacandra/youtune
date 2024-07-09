@@ -27,7 +27,13 @@ const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
           </h1>
           <div className='mb-20 grid md:grid-cols-6 grid-cols-4 gap-4 mb-20 2xl:grid-cols-8'>
             {d.contents.map((c: ContentDetail, j: number) => (
-              <MusicCard key={j} id={c.id} thumbnail={c.thumbnail} title={c.title.text} subtitle={c.subtitle[0].text} />
+              <MusicCard
+                key={j}
+                id={c.id}
+                thumbnail={c.thumbnail}
+                title={c.title.text}
+                subtitle={c.subtitle[0].text}
+              />
             ))}
           </div>
         </Fragment>
