@@ -2,18 +2,17 @@
 
 import { Fragment } from "react";
 import { Content, ContentDetail } from "@/app/api/featured/route";
-import useSWR from "swr";
 import MusicCard from "@/components/MusicCard/page";
 import Search from "@/components/Search";
+import useSWRImmutable from "swr/immutable";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
 
 const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
-  const { data, error, isLoading } = useSWR(
+  const { data, error, isLoading } = useSWRImmutable(
     `/api/search/${decodeURI(keyword)}`,
     fetcher,
   );
-
   if (error) return <p>Erorrrr</p>;
   if (isLoading) return <p>loadingggg</p>;
 
