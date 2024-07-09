@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Sidebar from "@/components/Sidebar/page";
-import AudioPlayer from "@/components/AudioPlayer/page";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -25,7 +24,6 @@ const RootLayout = ({
         <div className='flex flex-col w-full h-full md:pl-28 pl-4 pr-4 md:pr-8 md:pt-10 pt-20 text-white'>
           {children}
         </div>
-        <AudioPlayer />
       </body>
     </html>
   );

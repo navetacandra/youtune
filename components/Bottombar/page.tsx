@@ -1,3 +1,4 @@
+"use client";
 import React, { Fragment, ReactNode } from "react";
 import Icon from "@/components/Sidebar/icon";
 import HomeIcon from "@/assets/home.svg";
@@ -10,6 +11,7 @@ import Likeicon from "@/assets/like.svg";
 import LikeFillicon from "@/assets/like_fill.svg";
 import PlaylistIcon from "@/assets/playlist.svg";
 import PlaylistFillIcon from "@/assets/playlist_fill.svg";
+import AudioPlayer from "../AudioPlayer/page";
 
 const items: { element: ReactNode }[] = [
   { element: <Icon to='/' normal={<HomeIcon />} hover={<HomeFillIcon />} /> },
@@ -32,9 +34,10 @@ const items: { element: ReactNode }[] = [
 const Bottombar = () => {
   return (
     <>
-      <div className='fixed left-0 bottom-0 w-screen h-16 p-1 overflow-hidden bg-[#242b46] rounded-t-xl custom-shadow justify-center items-center text-center md:hidden inline-block'>
-        <div className='flex items-center '>
-          <div className='flex flex-row gap-10  justify-around pt-3 items-center mx-auto'>
+      <div className='fixed left-0 bottom-0 z-9 w-screen min-h-16 p-1 overflow-hidden bg-[#242b46] rounded-t-xl custom-shadow justify-center items-center text-center inline-block'>
+        <AudioPlayer />
+        <div className='flex items-center md:hidden'>
+          <div className='flex flex-row gap-10 justify-around pt-3 items-center mx-auto'>
             {items.map((item: { element: ReactNode }, i: number) => (
               <Fragment key={i}>{item.element}</Fragment>
             ))}

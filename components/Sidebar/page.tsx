@@ -1,5 +1,4 @@
 "use client";
-
 import Image from "next/image";
 import { Fragment, ReactNode } from "react";
 import Icon from "./icon";
@@ -37,7 +36,7 @@ const items: { element: ReactNode }[] = [
 const Sidebar = () => (
   <>
     <Navbar />
-    <div className='fixed top-0 left-0 h-screen w-[90px] p-4 overflow-hidden bg-[#242b46] rounded-none shadow-none justify-center items-center text-center md:inline-block hidden'>
+    <div className='fixed top-0 left-0 z-10 sidebar-shadow h-screen w-[90px] p-4 overflow-hidden bg-[#242b46] rounded-none shadow-none justify-center items-center text-center md:inline-block hidden'>
       <div className='flex flex-col items-center '>
         <Image
           id='logo'
