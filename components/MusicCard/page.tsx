@@ -3,7 +3,7 @@ import React from "react";
 import Image from "next/image";
 import { unqueue } from "../AudioPlayer/page";
 
-export default function MusicCard({
+const MusicCard = ({
   id,
   thumbnail,
   title,
@@ -13,15 +13,15 @@ export default function MusicCard({
   thumbnail: string;
   title: string;
   subtitle: string;
-}) {
-  async function setMedia() {
+}) => {
+  const setMedia = async () => {
     const queue = await (await fetch(`/api/next/${id}`)).json();
     if (queue) {
       sessionStorage.setItem("queue", JSON.stringify(queue));
       sessionStorage.setItem("queue-cursor", "0");
       unqueue();
     }
-  }
+  };
   return (
     <div className='transition-all'>
       <Image
@@ -36,4 +36,6 @@ export default function MusicCard({
       <p className='md:text-sm text-xs md:font-normal font-thin font-poppins max-w-[150px] cursor-pointer'>{`${subtitle}`}</p>
     </div>
   );
-}
+};
+
+export default MusicCard;

@@ -2,7 +2,7 @@
 import { useEffect } from "react";
 
 const audio = new Audio();
-function setAudioSrc() {
+const setAudioSrc = () => {
   const cursor = Number(sessionStorage.getItem("queue-cursor") || "0");
   const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
   if (queue[cursor]) {
@@ -10,13 +10,13 @@ function setAudioSrc() {
     audio.currentTime = 0;
     return true;
   } else return false;
-}
+};
 
-export function unqueue() {
+export const unqueue = () => {
   if (setAudioSrc()) audio.play();
-}
+};
 
-export default function AudioPlayer() {
+const AudioPlayer = () => {
   useEffect(() => {
     const intvl = setInterval(() => {
       // if(!audio.src) setAudioSrc();
@@ -37,4 +37,6 @@ export default function AudioPlayer() {
     () => clearInterval(intvl);
   }, []);
   return <audio id='player'></audio>;
-}
+};
+
+export default AudioPlayer;
