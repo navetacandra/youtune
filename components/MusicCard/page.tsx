@@ -15,8 +15,10 @@ const MusicCard = ({
   subtitle: string;
 }) => {
   const setMedia = async () => {
+    const audio = document.querySelector("audio#player") as HTMLAudioElement;
     const queue = await (await fetch(`/api/next/${id}`)).json();
     if (queue) {
+      audio.pause();
       sessionStorage.setItem("queue", JSON.stringify(queue));
       sessionStorage.setItem("queue-cursor", "0");
       unqueue();

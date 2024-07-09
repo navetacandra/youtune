@@ -12,7 +12,6 @@ const setAudioSrc = async () => {
     ).json();
     const url = await chunksToURL(chunks);
     audio.setAttribute("src", url);
-    audio.currentTime = 0;
     return true;
   } else return false;
 };
@@ -25,25 +24,16 @@ export const unqueue = async () => {
 const AudioPlayer = () => {
   useEffect(() => {
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
-    const intvl = setInterval(() => {
-      // if(!audio.src) setAudioSrc();
-      // else if(audio.ended) {
-      //   const cursor = Number(sessionStorage.getItem('queue-cursor') || '0') + 1;
-      //   sessionStorage.setItem('queue-cursor', cursor.toString());
-      //   unqueue();
-      // }
-      if (audio.ended) {
-        const cursor =
-          Number(sessionStorage.getItem("queue-cursor") || "0") + 1;
-        sessionStorage.setItem("queue-cursor", cursor.toString());
-      }
-      if (audio.ended || !audio.src) {
-        unqueue();
-      }
-    }, 1000);
-    () => clearInterval(intvl);
+    const handler = async () => {
+      const cursor = Number(sessionStorage.getItem("queue-cursor") || "0") + 1;
+      sessionStorage.setItem("queue-cursor", cursor.toString());
+      await unqueue();
+    };
+    audio.addEventListener("ended", handler);
+    if (!audio.src) setAudioSrc();
+    return () => audio.removeEventListener("ended", handler);
   }, []);
-  return <audio id='player'></audio>;
+  return <audio id='player' controls></audio>;
 };
 
 export default AudioPlayer;
