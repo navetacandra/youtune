@@ -16,7 +16,7 @@ const Search = () => {
     const searchQuery = query.current?.value.trim();
 
     if (!(!searchQuery || searchQuery.length < 2)) {
-      router.push(`/search/${encodeURI(searchQuery || "")}`);
+      router.push(`/search/${encodeURI(searchQuery || "")}`, undefined);
     }
   };
 
