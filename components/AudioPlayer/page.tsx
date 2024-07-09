@@ -1,8 +1,8 @@
 "use client";
 import { useEffect } from "react";
 
-const audio = new Audio();
 const setAudioSrc = () => {
+  const audio = document.querySelector("audio#player") as HTMLAudioElement;
   const cursor = Number(sessionStorage.getItem("queue-cursor") || "0");
   const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
   if (queue[cursor]) {
@@ -13,11 +13,13 @@ const setAudioSrc = () => {
 };
 
 export const unqueue = () => {
+  const audio = document.querySelector("audio#player") as HTMLAudioElement;
   if (setAudioSrc()) audio.play();
 };
 
 const AudioPlayer = () => {
   useEffect(() => {
+    const audio = document.querySelector("audio#player") as HTMLAudioElement;
     const intvl = setInterval(() => {
       // if(!audio.src) setAudioSrc();
       // else if(audio.ended) {
