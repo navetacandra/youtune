@@ -1,20 +1,25 @@
 "use client";
+import { chunksToURL } from "@/utils/functions";
 import { useEffect } from "react";
 
-const setAudioSrc = () => {
+const setAudioSrc = async () => {
   const audio = document.querySelector("audio#player") as HTMLAudioElement;
   const cursor = Number(sessionStorage.getItem("queue-cursor") || "0");
   const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
   if (queue[cursor]) {
-    audio.setAttribute("src", `/api/player/${queue[cursor].videoId}`);
+    const { chunks } = await (
+      await fetch(`/api/player/${queue[cursor].videoId}`)
+    ).json();
+    const url = await chunksToURL(chunks);
+    audio.setAttribute("src", url);
     audio.currentTime = 0;
     return true;
   } else return false;
 };
 
-export const unqueue = () => {
+export const unqueue = async () => {
   const audio = document.querySelector("audio#player") as HTMLAudioElement;
-  if (setAudioSrc()) audio.play();
+  if (await setAudioSrc()) audio.play();
 };
 
 const AudioPlayer = () => {
