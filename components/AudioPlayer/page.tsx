@@ -1,6 +1,6 @@
 "use client";
 import { chunksToURL } from "@/utils/functions";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 
 const setAudioSrc = async () => {
   const audio = document.querySelector("audio#player") as HTMLAudioElement;
@@ -22,6 +22,7 @@ export const unqueue = async () => {
 };
 
 const AudioPlayer = () => {
+  const initialized = useRef<boolean>(false);
   useEffect(() => {
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
     const handler = async () => {
@@ -29,8 +30,15 @@ const AudioPlayer = () => {
       sessionStorage.setItem("queue-cursor", cursor.toString());
       await unqueue();
     };
+
+    const init = async () => {
+      if (!audio.src && !initialized.current) {
+        initialized.current = true;
+        await setAudioSrc();
+      }
+    };
     audio.addEventListener("ended", handler);
-    if (!audio.src) setAudioSrc();
+    init();
     return () => audio.removeEventListener("ended", handler);
   }, []);
   return <audio id='player' controls></audio>;
