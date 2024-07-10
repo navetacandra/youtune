@@ -2,7 +2,7 @@ import fapi from "@/utils/api/fapi";
 import { StreamingFormat } from "@/utils/functions";
 import { NextResponse } from "next/server";
 
-const getFormats = async (videoId: string): Promise<StreamingFormat> => {
+const getFormats = async (videoId: string): Promise<StreamingFormat[]> => {
   const apiKey = "AIzaSyB-63vPrdThhKuerbB2N_l7Kwwcxj6yUAc";
   const headers = {
     "X-YouTube-Client-Name": "5",
@@ -40,7 +40,7 @@ const getFormats = async (videoId: string): Promise<StreamingFormat> => {
   );
   if (!res.ok) throw new Error(res.statusText);
   const json = await res.json();
-  return json.streamingData.adaptiveFormats as StreamingFormat;
+  return json.streamingData.adaptiveFormats as StreamingFormat[];
 };
 
 const chooseFormat = (formats: StreamingFormat[]) => {
@@ -103,10 +103,7 @@ export const GET = async (
       chunks,
       ok = false;
     while (!ok) {
-      const tform = await getFormats(id);
-      format = chooseFormat(tform, {
-        filter: "audio",
-      });
+      format = chooseFormat(await getFormats(id));
       meta = {
         duration: Number(format?.approxDurationMs) / 1000,
         size: Number(format?.contentLength),
