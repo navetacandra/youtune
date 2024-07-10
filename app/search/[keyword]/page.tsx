@@ -3,7 +3,6 @@
 import { Fragment } from "react";
 import { Content, ContentDetail } from "@/app/api/featured/route";
 import MusicCard from "@/components/MusicCard/page";
-import Search from "@/components/Search";
 import useSWRImmutable from "swr/immutable";
 
 const fetcher = (url: string) => fetch(url).then((r) => r.json());
@@ -18,7 +17,6 @@ const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
 
   return (
     <>
-      <Search />
       {data.results?.map((d: Content, i: number) => (
         <Fragment key={i}>
           <h1 className='md:text-3xl text-2xl font-poppins font-bold'>

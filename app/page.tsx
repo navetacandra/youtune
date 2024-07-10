@@ -2,7 +2,6 @@
 
 import { Fragment } from "react";
 import { Content, ContentDetail } from "@/app/api/featured/route";
-import Search from "@/components/Search";
 import MusicCard from "@/components/MusicCard/page";
 import useSWRImmutable from "swr/immutable";
 
@@ -15,7 +14,6 @@ const Home = () => {
 
   return (
     <>
-      <Search />
       {data.map((d: Content, i: number) => (
         <Fragment key={i}>
           <h1 className='md:text-3xl text-2xl font-poppins font-bold'>

@@ -1,5 +1,11 @@
 "use client";
-import React, { Fragment, ReactNode, useState } from "react";
+import React, {
+  Dispatch,
+  Fragment,
+  ReactNode,
+  SetStateAction,
+  useState,
+} from "react";
 import Icon from "@/components/Sidebar/icon";
 import HomeIcon from "@/assets/home.svg";
 import HomeFillIcon from "@/assets/home_fill.svg";
@@ -13,9 +19,10 @@ import PlaylistIcon from "@/assets/playlist.svg";
 import PlaylistFillIcon from "@/assets/playlist_fill.svg";
 import AudioPlayer from "../AudioPlayer/page";
 
-const items: { element: ReactNode }[] = [
+const items: { element: ReactNode; name?: string }[] = [
   { element: <Icon to='/' normal={<HomeIcon />} hover={<HomeFillIcon />} /> },
   {
+    name: "Search",
     element: <Icon to='/' normal={<SearchIcon />} hover={<SearchFillIcon />} />,
   },
   { element: <Icon to='/' normal={<Likeicon />} hover={<LikeFillicon />} /> },
@@ -31,7 +38,13 @@ const items: { element: ReactNode }[] = [
   },
 ];
 
-const Bottombar = () => {
+const Bottombar = ({
+  show,
+  setShow,
+}: {
+  show: boolean;
+  setShow: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [hasTrack, setHasTrack] = useState<boolean>(false);
   return (
     <>
@@ -44,9 +57,19 @@ const Bottombar = () => {
         <AudioPlayer hasTrack={setHasTrack} />
         <div className='flex items-center md:hidden'>
           <div className='flex flex-row gap-10 justify-around pt-3 items-center mx-auto'>
-            {items.map((item: { element: ReactNode }, i: number) => (
-              <Fragment key={i}>{item.element}</Fragment>
-            ))}
+            {items.map(
+              (item: { element: ReactNode; name?: string }, i: number) => (
+                <>
+                  {item.name == "Search" ? (
+                    <div key={i} onClick={() => setShow(!show)}>
+                      {item.element}
+                    </div>
+                  ) : (
+                    <Fragment key={i}>{item.element}</Fragment>
+                  )}
+                </>
+              ),
+            )}
           </div>
         </div>
       </div>

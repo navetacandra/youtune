@@ -58,6 +58,92 @@ body {
     0 -2px 4px rgba(0, 0, 0, 0.02);
 }
 
+@keyframes search-input-show-animation {
+  0% {
+    left: 50%;
+    width: 3rem;
+  }
+  50% {
+    left: 12.5%;
+    width: 3rem;
+  }
+  100% {
+    left: 12.5%;
+    width: 75%;
+  }
+}
+
+@keyframes search-input-hide-animation {
+  0% {
+    display: flex;
+    opacity: 1;
+    left: 12.5%;
+    width: 75%;
+  }
+  50% {
+    display: flex;
+    opacity: 1;
+    left: 12.5%;
+    width: 3rem;
+  }
+  100% {
+    display: none;
+    opacity: 0;
+    left: 12.5%;
+    width: 3rem;
+  }
+}
+
+.search-input {
+  top: 6.25rem;
+  animation: search-input-show-animation 0.75s ease-in-out forwards;
+}
+
+@media screen and (min-width: 768px) {
+  @keyframes search-input-show-animation {
+    0% {
+      left: 30%;
+      width: 3rem;
+    }
+    50% {
+      left: 7rem;
+      width: 3rem;
+    }
+    100% {
+      left: 7rem;
+      width: 30%;
+    }
+  }
+
+  @keyframes search-input-hide-animation {
+    0% {
+      display: flex;
+      opacity: 1;
+      left: 7rem;
+      width: 30%;
+    }
+    50% {
+      display: flex;
+      opacity: 1;
+      left: 7rem;
+      width: 3rem;
+    }
+    100% {
+      display: none;
+      opacity: 0;
+      left: 7rem;
+      width: 3rem;
+    }
+  }
+  .search-input {
+    top: 4rem;
+  }
+}
+
+.search-input.hide {
+  animation: search-input-hide-animation 0.75s ease-in-out forwards;
+}
+
 #timetrack {
   @apply [&::-webkit-slider-runnable-track]:rounded-full 
   [&::-webkit-slider-thumb]:appearance-none 
