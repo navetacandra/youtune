@@ -1,5 +1,5 @@
 "use client";
-import React, { Fragment, ReactNode } from "react";
+import React, { Fragment, ReactNode, useState } from "react";
 import Icon from "@/components/Sidebar/icon";
 import HomeIcon from "@/assets/home.svg";
 import HomeFillIcon from "@/assets/home_fill.svg";
@@ -32,10 +32,16 @@ const items: { element: ReactNode }[] = [
 ];
 
 const Bottombar = () => {
+  const [hasTrack, setHasTrack] = useState<boolean>(false);
   return (
     <>
-      <div className='fixed left-0 bottom-0 z-9 w-screen min-h-16 p-1 overflow-hidden bg-[#242b46] rounded-t-xl custom-shadow justify-center items-center text-center inline-block'>
-        <AudioPlayer />
+      <div
+        className={
+          "fixed left-0 bottom-0 z-9 w-screen min-h-16 p-1 overflow-hidden bg-[#242b46] rounded-t-xl custom-shadow justify-center items-center text-center inline-block " +
+          (hasTrack ? "" : "md:hidden")
+        }
+      >
+        <AudioPlayer hasTrack={setHasTrack} />
         <div className='flex items-center md:hidden'>
           <div className='flex flex-row gap-10 justify-around pt-3 items-center mx-auto'>
             {items.map((item: { element: ReactNode }, i: number) => (

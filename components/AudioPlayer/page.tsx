@@ -21,7 +21,9 @@ const formatTime = (seconds: number) => {
     .join(":");
 };
 
-const setAudioSrc = async (abortSignal?: AbortSignal) => {
+const setAudioSrc = async (
+  abortSignal?: AbortSignal,
+): Promise<Track | null> => {
   try {
     if (abortSignal?.aborted) throw new Error("Request aborted");
 
@@ -30,7 +32,6 @@ const setAudioSrc = async (abortSignal?: AbortSignal) => {
     const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
 
     if (queue[cursor]) {
-      setTrack?.(queue[cursor]);
       const response = await fetch(`/api/player/${queue[cursor].videoId}`, {
         signal: abortSignal,
       });
@@ -45,9 +46,12 @@ const setAudioSrc = async (abortSignal?: AbortSignal) => {
         meta.duration,
       );
       document.querySelector("#time")!.innerHTML = formatTime(0);
+      return queue[cursor];
     }
+    return null;
   } catch (error: any) {
     if (error.name !== "AbortError") console.error(error);
+    return null;
   }
 };
 
@@ -55,22 +59,39 @@ export const unqueue = async (abortSignal?: AbortSignal) => {
   try {
     if (abortSignal?.aborted) throw new Error("Request aborted");
 
-    await setAudioSrc(abortSignal);
+    const set = await setAudioSrc(abortSignal);
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
-    if (audio.src) audio.play();
+    if (audio.src && set != null) {
+      setTrack?.(set);
+      audio.play();
+    }
   } catch (error: any) {
     if (error.name !== "AbortError") console.error(error);
   }
 };
 
-const AudioPlayer = () => {
+const AudioPlayer = ({
+  hasTrack,
+}: {
+  hasTrack: Dispatch<SetStateAction<boolean>>;
+}) => {
   [track, setTrack] = useState<Track | null>(null);
   const [isPlaying, setIsPlaying] = useState<boolean>(false);
   const initialized = useRef<boolean>(false);
   const abortSignal = useRef<AbortController>(new AbortController());
 
-  const playAndStop = () => {
+  const playAndStop = (play?: boolean) => {
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
+    if (play) {
+      audio.play();
+      setIsPlaying(true);
+      return;
+    } else if (play === false) {
+      audio.pause();
+      setIsPlaying(false);
+      return;
+    }
+
     if (audio.paused) {
       audio.play();
       setIsPlaying(true);
@@ -89,7 +110,7 @@ const AudioPlayer = () => {
     (
       document.querySelector("#timetrack-progress") as HTMLDivElement
     ).style.width = `0%`;
-    setIsPlaying(false);
+    playAndStop(false);
     abortSignal.current.abort();
     abortSignal.current = new AbortController();
   };
@@ -138,8 +159,8 @@ const AudioPlayer = () => {
 
     const init = async () => {
       if (!audio.src && !initialized.current) {
-        initialized.current = true;
-        await setAudioSrc();
+        const track = await setAudioSrc();
+        if (track != null) setTrack?.(track);
       }
     };
 
@@ -152,80 +173,84 @@ const AudioPlayer = () => {
     };
   }, []);
 
+  useEffect(() => {
+    hasTrack(track != null);
+  }, [track]);
+
   return (
     <>
       <audio id='player' />
-      {track !== null ? (
-        <div className='md:pl-28 md:pr-8 px-2 py-2 h-16 md:h-18 w-full flex justify-between'>
-          <div className='flex jusify-start items-center w-1/2 md:w-1/6'>
-            <Image
-              alt='thumbnail'
-              src={track?.thumbnail || ""}
-              width={55}
-              height={55}
-              className='bg-zinc-700'
-            />
-            <div className='flex flex-col text-start ml-3'>
-              <p className='text-sm text-balance font-bold line-clamp-2'>
-                {track?.title.text || ""}
-              </p>
-              <p className='text-xs text-balance font-semibold text-zinc-300 line-clamp-1'>
-                {track?.subtitle.text || ""}
-              </p>
-            </div>
+      <div
+        className={
+          "md:pl-28 md:pr-8 px-2 py-2 h-16 md:h-18 w-full justify-between" +
+          (track ? " flex" : " hidden")
+        }
+      >
+        <div className='flex jusify-start items-center w-1/2 md:w-1/6'>
+          <Image
+            alt='thumbnail'
+            src={track?.thumbnail || ""}
+            width={55}
+            height={55}
+            className='bg-zinc-700'
+          />
+          <div className='flex flex-col text-start ml-3'>
+            <p className='text-sm text-balance font-bold line-clamp-2'>
+              {track?.title.text || ""}
+            </p>
+            <p className='text-xs text-balance font-semibold text-zinc-300 line-clamp-1'>
+              {track?.subtitle.text || ""}
+            </p>
           </div>
-          <div className='w-full px-8 hidden md:flex flex-col items-start justify-center'>
-            <div className='w-full h-3/4 flex justify-center items-center'>
-              <NextIcon
-                className='w-6 h-6 rotate-180 cursor-pointer'
-                onClick={prevTrack}
-              />
-              <div
-                className='w-10 h-10 rounded-full bg-white mx-4 my-4 p-1 flex cursor-pointer'
-                onClick={playAndStop}
-              >
-                {isPlaying ? (
-                  <PauseIcon className='mx-auto my-auto hover:scale-110 transition-all' />
-                ) : (
-                  <PlayIcon className='mx-auto my-auto hover:scale-110 transition-all' />
-                )}
-              </div>
-              <NextIcon
-                className='w-6 h-6 cursor-pointer'
-                onClick={skipTrack}
-              />
-            </div>
-            <div className='w-full flex justify-center items-center'>
-              <span className='text-sm' id='time'>
-                --:--
-              </span>
-              <div className='w-3/4 mx-4'>
-                <div className='h-1 w-full relative'>
-                  <div className='w-full h-full bg-white/15 absolute top-0 left-0 rounded-lg'></div>
-                  <div
-                    id='timetrack-progress'
-                    className='w-full h-full bg-white absolute top-0 left-0 rounded-lg'
-                    style={{ width: "0" }}
-                  ></div>
-                  <input
-                    type='range'
-                    id='timetrack'
-                    onInput={trackSkip}
-                    className='absolute top-0 left-0 rounded-xl appearance-none bg-transparent h-full w-full'
-                    defaultValue={0}
-                    min={0}
-                    max={100}
-                  />
-                </div>
-              </div>
-              <span className='text-sm' id='duration'>
-                --:--
-              </span>
-            </div>
-          </div>
-          <div className='flex jusify-start items-center w-1/2 md:w-1/6'></div>
         </div>
-      ) : null}
+        <div className='w-full px-8 hidden md:flex flex-col items-start justify-center'>
+          <div className='w-full h-3/4 flex justify-center items-center'>
+            <NextIcon
+              className='w-6 h-6 rotate-180 cursor-pointer'
+              onClick={prevTrack}
+            />
+            <div
+              className='w-10 h-10 rounded-full bg-white mx-4 my-4 p-1 flex cursor-pointer'
+              onClick={() => playAndStop()}
+            >
+              {isPlaying ? (
+                <PauseIcon className='mx-auto my-auto hover:scale-110 transition-all' />
+              ) : (
+                <PlayIcon className='mx-auto my-auto hover:scale-110 transition-all' />
+              )}
+            </div>
+            <NextIcon className='w-6 h-6 cursor-pointer' onClick={skipTrack} />
+          </div>
+          <div className='w-full flex justify-center items-center'>
+            <span className='text-sm' id='time'>
+              --:--
+            </span>
+            <div className='w-3/4 mx-4'>
+              <div className='h-1 w-full relative'>
+                <div className='w-full h-full bg-white/15 absolute top-0 left-0 rounded-lg'></div>
+                <div
+                  id='timetrack-progress'
+                  className='w-full h-full bg-white absolute top-0 left-0 rounded-lg'
+                  style={{ width: "0" }}
+                ></div>
+                <input
+                  type='range'
+                  id='timetrack'
+                  onInput={trackSkip}
+                  className='absolute top-0 left-0 rounded-xl appearance-none bg-transparent h-full w-full'
+                  defaultValue={0}
+                  min={0}
+                  max={100}
+                />
+              </div>
+            </div>
+            <span className='text-sm' id='duration'>
+              --:--
+            </span>
+          </div>
+        </div>
+        <div className='flex jusify-start items-center w-1/2 md:w-1/6'></div>
+      </div>
     </>
   );
 };
