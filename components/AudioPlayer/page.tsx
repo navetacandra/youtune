@@ -1,5 +1,5 @@
 "use client";
-import { Track, chunksToURL } from "@/utils/functions";
+import { Chunk, Track } from "@/utils/functions";
 import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import NextIcon from "@/assets/next.svg";
@@ -10,6 +10,8 @@ let [track, setTrack] = [null, null] as [
   Track | null,
   Dispatch<SetStateAction<Track | null>> | null,
 ];
+let mediaSource: MediaSource;
+let sourceBuffer: SourceBuffer;
 
 const formatTime = (seconds: number) => {
   const h = Math.floor(seconds / 3600);
@@ -28,6 +30,7 @@ const setAudioSrc = async (
     if (abortSignal?.aborted) throw new Error("Request aborted");
 
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
+    const progress = document.querySelector("#timetrack") as HTMLInputElement;
     const cursor = Number(sessionStorage.getItem("queue-cursor") || "0");
     const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
 
@@ -38,10 +41,57 @@ const setAudioSrc = async (
       if (!response.ok) throw new Error("Failed to fetch audio data");
 
       const { chunks, meta } = await response.json();
-      const url = await chunksToURL(chunks, abortSignal);
-      if (abortSignal?.aborted) throw new Error("Request aborted");
 
-      audio.setAttribute("src", url);
+      progress.max = meta.duration;
+      mediaSource = new MediaSource();
+      let currentChunkIndex = 0;
+      audio.src = URL.createObjectURL(mediaSource);
+
+      mediaSource.addEventListener("sourceopen", () => {
+        sourceBuffer = mediaSource.addSourceBuffer(meta.mime);
+
+        const fetchChunk = async () => {
+          const end =
+            sourceBuffer.buffered.length > 0 ? sourceBuffer.buffered.end(0) : 0;
+          while (!abortSignal?.aborted && audio.currentTime < end - 1)
+            await new Promise((r) => setTimeout(r, 500)); // waitinhg for next chunk
+
+          if (abortSignal?.aborted) throw new Error("Request aborted");
+          if (currentChunkIndex >= chunks.length) {
+            console.log("end of stream");
+            mediaSource.endOfStream();
+            return;
+          }
+
+          const { req_url } = chunks[currentChunkIndex] as Chunk;
+          try {
+            const response = await fetch(req_url, { signal: abortSignal });
+            if (!response.ok)
+              throw new Error(`Failed to fetch chunk from ${req_url}`);
+            const arrayBuffer = await response.arrayBuffer();
+            sourceBuffer.appendBuffer(arrayBuffer);
+            currentChunkIndex++;
+          } catch (error) {
+            console.error(error);
+          }
+        };
+
+        const onUpdateEnd = () => {
+          if (sourceBuffer.buffered.length > 0) {
+            const start = sourceBuffer.buffered.start(0);
+            const end = sourceBuffer.buffered.end(0);
+            if (audio.currentTime > end - 15) {
+              sourceBuffer.remove(start, end);
+            }
+          }
+
+          if (!audio.paused && !sourceBuffer.updating) fetchChunk();
+        };
+
+        sourceBuffer.addEventListener("updateend", onUpdateEnd);
+        audio.onplay = () => fetchChunk(); // Fetch the first chunk
+      });
+
       document.querySelector("#duration")!.innerHTML = formatTime(
         meta.duration,
       );
@@ -133,7 +183,7 @@ const AudioPlayer = ({
     const audio = document.querySelector("audio#player") as HTMLAudioElement;
     const progress = (document.querySelector("#timetrack") as HTMLInputElement)
       .value;
-    audio.currentTime = audio.duration * (Number(progress) / 100);
+    audio.currentTime = Number(progress);
   };
 
   useEffect(() => {
@@ -148,7 +198,7 @@ const AudioPlayer = ({
 
     const trackRun = () => {
       (document.querySelector("#timetrack") as HTMLInputElement).value =
-        `${Math.round((audio.currentTime / audio.duration) * 100)}`;
+        `${audio.currentTime}`;
       (
         document.querySelector("#timetrack-progress") as HTMLDivElement
       ).style.width =
@@ -159,6 +209,7 @@ const AudioPlayer = ({
 
     const init = async () => {
       if (!audio.src && !initialized.current) {
+        initialized.current = true;
         const track = await setAudioSrc();
         if (track != null) setTrack?.(track);
       }
