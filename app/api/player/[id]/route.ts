@@ -105,6 +105,7 @@ export const GET = async (
     while (!ok) {
       format = chooseFormat(await getFormats(id));
       meta = {
+        mime: format.mimeType,
         duration: Number(format?.approxDurationMs) / 1000,
         size: Number(format?.contentLength),
         url: format?.url,
@@ -113,9 +114,9 @@ export const GET = async (
       ok = res.ok;
       if (ok) {
         chunks = [];
-        const size = Math.ceil((meta.size / meta.duration) * 5);
+        const size = Math.ceil((format.bitrate * 29) / 8);
         for (let total = 0; total < meta.size; ) {
-          let next = total + size;
+          let next = total + size - 1;
           if (next > meta.size) next = meta.size;
           chunks.push({
             start: total,
