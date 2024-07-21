@@ -19,7 +19,7 @@ const Home = () => {
           <h1 className='md:text-3xl text-2xl font-poppins font-bold'>
             {d.category}
           </h1>
-          <div className='grid md:grid-cols-6 grid-cols-4 gap-4 mb-20 2xl:grid-cols-8'>
+          <div className='grid md:grid-cols-6 grid-cols-4 gap-4 mb-32 2xl:grid-cols-8'>
             {d.contents.map((c: ContentDetail, j: number) => (
               <MusicCard
                 key={j}

@@ -24,6 +24,7 @@ const MusicCard = ({
       unqueue();
     }
   };
+
   return (
     <div className='transition-all'>
       <Image

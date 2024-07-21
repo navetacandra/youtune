@@ -22,7 +22,7 @@ const Page = ({ params: { keyword } }: { params: { keyword: string } }) => {
           <h1 className='md:text-3xl text-2xl font-poppins font-bold'>
             {d.category}
           </h1>
-          <div className='mb-20 grid md:grid-cols-6 grid-cols-4 gap-4 mb-20 2xl:grid-cols-8'>
+          <div className='mb-20 grid md:grid-cols-6 grid-cols-4 gap-4 2xl:grid-cols-8'>
             {d.contents.map((c: ContentDetail, j: number) => (
               <MusicCard
                 key={j}
