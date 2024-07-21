@@ -56,7 +56,7 @@ const Bottombar = ({
       >
         <AudioPlayer hasTrack={setHasTrack} />
         <div className='flex items-center md:hidden'>
-          <div className='flex flex-row gap-10 justify-around pt-3 items-center mx-auto'>
+          <div className='flex flex-row gap-10 justify-around pt-3 pb-1 items-center mx-auto'>
             {items.map(
               (item: { element: ReactNode; name?: string }, i: number) => (
                 <>

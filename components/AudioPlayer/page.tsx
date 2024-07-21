@@ -186,13 +186,14 @@ const AudioPlayer = ({
           (track ? " flex" : " hidden")
         }
       >
-        <div className='flex jusify-start items-center w-1/2 md:w-1/6'>
+        <div className='flex jusify-start items-center w-[700%] md:w-2/6'>
           <Image
             alt='thumbnail'
             src={track?.thumbnail || ""}
-            width={55}
-            height={55}
-            className='bg-zinc-700'
+            width={56}
+            height={56}
+            className='bg-zinc-700 rounded-full'
+            onClick={() => playAndStop()}
           />
           <div className='flex flex-col text-start ml-3'>
             <p className='text-sm text-balance font-bold line-clamp-2'>
@@ -203,31 +204,34 @@ const AudioPlayer = ({
             </p>
           </div>
         </div>
-        <div className='w-full px-8 hidden md:flex flex-col items-start justify-center'>
+        <div className='w-1/2 md:px-8 px-0 flex md:flex flex-col items-start justify-center'>
           <div className='w-full h-3/4 flex justify-center items-center'>
             <NextIcon
-              className='w-6 h-6 rotate-180 cursor-pointer'
+              className='w-5 h-5 rotate-180 cursor-pointer md:block hidden'
               onClick={prevTrack}
             />
             <div
-              className='w-10 h-10 rounded-full bg-white mx-4 my-4 p-1 flex cursor-pointer'
+              className='w-9 h-9 rounded-full bg-white md:mx-4 mx-0 my-4 md:p-1 pl-0 cursor-pointer flex '
               onClick={() => playAndStop()}
             >
               {isPlaying ? (
                 <PauseIcon className='mx-auto my-auto hover:scale-110 transition-all' />
               ) : (
-                <PlayIcon className='mx-auto my-auto hover:scale-110 transition-all' />
+                <PlayIcon className='mx-auto my-auto hover:scale-110 transition-all text-white' />
               )}
             </div>
-            <NextIcon className='w-6 h-6 cursor-pointer' onClick={skipTrack} />
+            <NextIcon
+              className='w-5 h-5 cursor-pointer md:block hidden'
+              onClick={skipTrack}
+            />
           </div>
-          <div className='w-full flex justify-center items-center'>
-            <span className='text-sm' id='time'>
+          <div className='w-full justify-center items-center md:flex hidden'>
+            <span className='text-xs' id='time'>
               --:--
             </span>
             <div className='w-3/4 mx-4'>
               <div className='h-1 w-full relative'>
-                <div className='w-full h-full bg-white/15 absolute top-0 left-0 rounded-lg'></div>
+                <div className='w-full h-full bg-white/15 absolute md:top-0 bottom-0 left-0 rounded-lg'></div>
                 <div
                   id='timetrack-progress'
                   className='w-full h-full bg-white absolute top-0 left-0 rounded-lg'
@@ -244,12 +248,12 @@ const AudioPlayer = ({
                 />
               </div>
             </div>
-            <span className='text-sm' id='duration'>
+            <span className='text-xs' id='duration'>
               --:--
             </span>
           </div>
         </div>
-        <div className='flex jusify-start items-center w-1/2 md:w-1/6'></div>
+        <div className='flex jusify-start items-center w-1/2 md:w-2/6'></div>
       </div>
     </>
   );

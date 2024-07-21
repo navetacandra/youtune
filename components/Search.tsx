@@ -66,7 +66,7 @@ const Search = ({
           type='text'
           ref={query}
           defaultValue={decodeURIComponent(p)}
-          className='w-full text-black py-1 bg-transparent text-base text-black focus:outline-none active:outline-none'
+          className='w-full text-black py-1 bg-transparent text-base focus:outline-none active:outline-none'
         ></input>
       </form>
       <div
