@@ -1,11 +1,10 @@
-import Image from "next/image";
 import React from "react";
 
 const Navbar = () => {
   return (
     <div className='fixed top-0 left-0 w-screen bg-[#272d54] items-center md:hidden inline-block'>
       <div className='flex items-center px-5 py-4'>
-        <Image
+        <img
           id='logo'
           src={"/mainLogo.svg"}
           alt='logo'

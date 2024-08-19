@@ -1,6 +1,5 @@
 "use client";
 import { Track, chunksToURL } from "@/utils/functions";
-import Image from "next/image";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import NextIcon from "@/assets/next.svg";
 import PlayIcon from "@/assets/play.svg";
@@ -187,7 +186,7 @@ const AudioPlayer = ({
         }
       >
         <div className='flex jusify-start items-center w-[700%] md:w-2/6'>
-          <Image
+          <img
             alt='thumbnail'
             src={track?.thumbnail || ""}
             width={56}

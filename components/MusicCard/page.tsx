@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import Image from "next/image";
 import { unqueue } from "../AudioPlayer/page";
 
 const MusicCard = ({
@@ -27,7 +26,7 @@ const MusicCard = ({
 
   return (
     <div className='transition-all'>
-      <Image
+      <img
         src={thumbnail}
         alt={title}
         width={300}
