@@ -1,9 +1,8 @@
 import fapi from "@/utils/api/fapi";
 import { StreamingFormat } from "@/utils/functions";
 import { NextResponse } from "next/server";
-import { getInfo } from "@distube/ytdl-core";
-// import { HttpsProxyAgent } from "https-proxy-agent";
-("https-proxy-agent");
+import { createProxyAgent, getInfo } from "@distube/ytdl-core";
+import { HttpsProxyAgent } from "https-proxy-agent";
 import { default as nFetch } from "node-fetch";
 
 export const GET = async (
@@ -41,9 +40,9 @@ export const GET = async (
       end > start
     ) {
       try {
-        // const agent = new HttpsProxyAgent("http://152.26.229.66:9443");
+        const agent = new HttpsProxyAgent(process.env.PROXY_URL);
         const streamRes = await nFetch(query.get("url") || "", {
-          // agent,
+          agent,
           method: "GET",
           headers: { Range: `bytes=${start}-${end}` },
         });
@@ -56,9 +55,9 @@ export const GET = async (
       }
     }
 
-    // const agent = createProxyAgent({ uri: "http://152.26.229.66:9443" });
+    const agent = createProxyAgent({ uri: process.env.PROXY_URL });
     const _info = await getInfo(`https://www.youtube.com/watch?v=${id}`, {
-      // agent,
+      agent,
     });
     const format = _info.formats.filter(
       (f) => !!f.hasAudio,
