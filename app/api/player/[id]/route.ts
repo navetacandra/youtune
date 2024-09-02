@@ -40,7 +40,7 @@ export const GET = async (
       end > start
     ) {
       try {
-        const agent = new HttpsProxyAgent(process.env.PROXY_URL);
+        const agent = new HttpsProxyAgent(process.env.PROXY_URL || "");
         const streamRes = await nFetch(query.get("url") || "", {
           agent,
           method: "GET",
@@ -55,7 +55,7 @@ export const GET = async (
       }
     }
 
-    const agent = createProxyAgent({ uri: process.env.PROXY_URL });
+    const agent = createProxyAgent({ uri: process.env.PROXY_URL || "" });
     const _info = await getInfo(`https://www.youtube.com/watch?v=${id}`, {
       agent,
     });
