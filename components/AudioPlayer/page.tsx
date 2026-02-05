@@ -1,5 +1,5 @@
 "use client";
-import { Track, chunksToURL } from "@/utils/functions";
+import { Track } from "@/utils/functions";
 import { Dispatch, SetStateAction, useEffect, useRef, useState } from "react";
 import NextIcon from "@/assets/next.svg";
 import PlayIcon from "@/assets/play.svg";
@@ -31,13 +31,12 @@ const setAudioSrc = async (
     const queue = JSON.parse(sessionStorage.getItem("queue") || "[]");
 
     if (queue[cursor]) {
-      const response = await fetch(`/api/player/${queue[cursor].videoId}`, {
+      const response = await fetch(`/api/player/${queue[cursor].musicId}`, {
         signal: abortSignal,
       });
       if (!response.ok) throw new Error("Failed to fetch audio data");
 
-      const { chunks, meta } = await response.json();
-      const url = await chunksToURL(chunks, abortSignal);
+      const { url, meta } = await response.json();
       if (abortSignal?.aborted) throw new Error("Request aborted");
 
       audio.setAttribute("src", url);

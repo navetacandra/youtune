@@ -23,10 +23,10 @@ const Home = () => {
             {d.contents.map((c: ContentDetail, j: number) => (
               <MusicCard
                 key={j}
-                id={c.id}
+                id={c.musicId}
                 thumbnail={c.thumbnail}
-                title={c.title.text}
-                subtitle={c.subtitle[0].text}
+                title={c.title}
+                subtitle={c.subtitle}
               />
             ))}
           </div>
